@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Courier\Test;
+namespace Courier\Sparkpost\Test;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {

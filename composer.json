@@ -1,6 +1,6 @@
 {
-    "name": "quartzy/courier",
-    "description": "A transactional email sending library using the php-email domain",
+    "name": "quartzy/courier-sparkpost",
+    "description": "An adapter to use Sparkpost with Courier",
     "type": "library",
     "license": "Apache-2.0",
     "authors": [
@@ -13,35 +13,26 @@
     "require": {
         "php": "^7.1",
         "psr/log": "^1.0",
-        "quartzy/php-email": "^0.5.1"
+        "quartzy/courier": "^0.4.0",
+        "sparkpost/sparkpost": "^2.1"
     },
     "require-dev": {
         "ext-imap": "*",
-        "sendgrid/sendgrid": "^5.1",
         "phpunit/phpunit": "^7.0",
         "guzzlehttp/guzzle": "^6.3",
         "php-http/guzzle6-adapter": "^1.1",
-        "sparkpost/sparkpost": "^2.1",
         "mockery/mockery": "^0.9.8",
-        "wildbit/postmark-php": "^2.3",
         "vlucas/phpdotenv": "^2.4",
         "zbateson/mail-mime-parser": "^0.4.8"
     },
-    "suggest": {
-        "sendgrid/sendgrid": "To use the SendGridCourier",
-        "guzzlehttp/guzzle": "This or some other http client is needed for the SparkPostCourier",
-        "php-http/guzzle6-adapter": "This or some other adapter is needed for the SparkPostCourier",
-        "sparkpost/sparkpost": "To use the SparkPostCourier",
-        "wildbit/postmark-php": "To use the PostmarkCourier"
-    },
     "autoload": {
         "psr-4": {
-            "Courier\\": "src"
+            "Courier\\Sparkpost\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Courier\\Test\\": "tests"
+            "Courier\\Sparkpost\\Test\\": "tests"
         }
     },
     "scripts": {

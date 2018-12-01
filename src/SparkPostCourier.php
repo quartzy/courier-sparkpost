@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Courier;
+namespace Courier\Sparkpost;
 
+use Courier\ConfirmingCourier;
 use Courier\Exceptions\TransmissionException;
 use Courier\Exceptions\UnsupportedContentException;
 use Courier\Exceptions\ValidationException;
+use Courier\SavesReceipts;
 use PhpEmail\Address;
 use PhpEmail\Content;
 use PhpEmail\Email;

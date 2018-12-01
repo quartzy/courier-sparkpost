@@ -1,4 +1,4 @@
-# Courier
+# Sparkpost Courier
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Total Downloads][ico-downloads]][link-downloads]
@@ -8,54 +8,45 @@
 [![Style Status][ico-styleci]][link-styleci]
 [![Scrutinizer Code Quality][ico-scrutinizer]][link-scrutinizer]
 
-A library to send transactional emails using domain objects and concise
-interfaces.
+A courier implementation for Sparkpost.
 
-Check out the [documentation](https://quartzy.github.io/courier/) for more details on
-how to use Courier!
-
-This library provides tools to send standardized emails using third-party SaaS
-SMTP providers like SparkPost and Postmark without having to reinvent the wheel.
-By leveraging a [standardized domain
-model](https://github.com/quartzy/php-email) for defining our emails, Courier is
-capable of defining drivers (or "couriers" in our case) that allow the developer
-to easily switch out how they send their emails without changing any part of
-their code that builds and delivers the email.
+See [documentation](https://quartzy.github.io/courier/couriers/sparkpost/) for full details.
 
 ## Install
 
 ### Via Composer
 
 ```bash
-composer require quartzy/courier
+composer require quartzy/courier-sparkpost
 ```
+
+You will also need to install a php-http implementation library
+[as defined in the Sparkpost docs](https://github.com/SparkPost/php-sparkpost#installation).
 
 ## Usage
-
-Each email provider will also have their own dependencies, for example:
-
-```bash
-# Send emails with SendGrid
-composer require sendgrid/sendgrid
-```
-
-Now you just need to create an email and send it:
 
 ```php
 <?php
 
-use Courier\SendGridCourier;
+use Courier\SparkPostCourier;
+use GuzzleHttp\Client;
+use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
+use PhpEmail\Content\TemplatedContent;
 use PhpEmail\EmailBuilder;
-use PhpEmail\Content\SimpleContent;
+use SparkPost\SparkPost;
 
-$key     = getenv('SENDGRID_KEY');
-$courier = new SendGridCourier(new \SendGrid($key));
+new Client();
+
+$courier = new SparkPostCourier(
+    new SparkPost(new GuzzleAdapter(new Client()), ['key'=>'YOUR_API_KEY'])
+);
 
 $email = EmailBuilder::email()
+    ->from('test@mybiz.com')
+    ->to('loyal.customer@email.com')
+    ->replyTo('test@mybiz.com', 'Your Sales Rep')
     ->withSubject('Welcome!')
-    ->withContent(SimpleContent::text('Start your free trial now!!!'))
-    ->from('me@test.com')
-    ->to('you@yourbusiness.com')
+    ->withContent(new TemplatedContent('my_email', ['testKey' => 'value']))
     ->build();
 
 $courier->deliver($email);
@@ -63,12 +54,6 @@ $courier->deliver($email);
 
 For details on building the email objects, see [Php Email](https://github.com/quartzy/php-email).
 
-
-## Supported Service Providers
-
-1. SendGrid (using v3 Web API)
-1. SparkPost
-1. Postmark
 
 ## Change log
 
@@ -92,18 +77,18 @@ If you discover any security related issues, please email [opensource@quartzy.co
 
 The Apache License, v2.0. Please see [License File](LICENSE) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/quartzy/courier.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/quartzy/courier-sparkpost.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg?style=flat-square
-[ico-travisci]: https://img.shields.io/travis/quartzy/courier.svg?style=flat-square
-[ico-codecov]: https://img.shields.io/scrutinizer/coverage/g/quartzy/courier.svg?style=flat-square
+[ico-travisci]: https://img.shields.io/travis/quartzy/courier-sparkpost.svg?style=flat-square
+[ico-codecov]: https://img.shields.io/scrutinizer/coverage/g/quartzy/courier-sparkpost.svg?style=flat-square
 [ico-styleci]: https://styleci.io/repos/98693280/shield
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/g/quartzy/courier.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/quartzy/courier.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/g/quartzy/courier-sparkpost.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/quartzy/courier-sparkpost.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/quartzy/courier
-[link-travisci]: https://travis-ci.org/quartzy/courier
-[link-codecov]: https://scrutinizer-ci.com/g/quartzy/courier
-[link-styleci]: https://styleci.io/repos/98693280
-[link-scrutinizer]: https://scrutinizer-ci.com/g/quartzy/courier
-[link-downloads]: https://packagist.org/packages/quartzy/courier
+[link-packagist]: https://packagist.org/packages/quartzy/courier-sparkpost
+[link-travisci]: https://travis-ci.org/quartzy/courier-sparkpost
+[link-codecov]: https://scrutinizer-ci.com/g/quartzy/courier-sparkpost
+[link-styleci]: https://styleci.io/repos/projectid
+[link-scrutinizer]: https://scrutinizer-ci.com/g/quartzy/courier-sparkpost
+[link-downloads]: https://packagist.org/packages/quartzy/courier-sparkpost
 [link-contributors]: ../../contributors

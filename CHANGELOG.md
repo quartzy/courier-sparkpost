@@ -7,7 +7,9 @@ and this project attempts to follow [Semantic Versioning](http://semver.org/spec
 
 ## Unreleased
 
-### 0.1.0
+## 0.1.0
+
+### Changed
 
 * Update namespace to `Courier\Sparkpost`
 * Forked project from [quartzy/courier 0.4.0](https://github.com/quartzy/courier) with just Sparkpost logic.

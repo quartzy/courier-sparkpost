@@ -8,7 +8,7 @@ use Courier\Exceptions\TransmissionException;
 use Courier\Exceptions\UnsupportedContentException;
 use Courier\Exceptions\ValidationException;
 use Courier\Sparkpost\Test\Support\TestContent;
-use Courier\SparkPostCourier;
+use Courier\Sparkpost\SparkPostCourier;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Http\Client\Exception\HttpException;
@@ -27,7 +27,7 @@ use SparkPost\SparkPostResponse;
 use SparkPost\Transmission;
 
 /**
- * @covers \Courier\SparkPostCourier
+ * @covers \Courier\Sparkpost\SparkPostCourier
  */
 class SparkPostCourierTest extends TestCase
 {

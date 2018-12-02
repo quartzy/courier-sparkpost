@@ -88,7 +88,7 @@ The Apache License, v2.0. Please see [License File](LICENSE) for more informatio
 [link-packagist]: https://packagist.org/packages/quartzy/courier-sparkpost
 [link-travisci]: https://travis-ci.org/quartzy/courier-sparkpost
 [link-codecov]: https://scrutinizer-ci.com/g/quartzy/courier-sparkpost
-[link-styleci]: https://styleci.io/repos/projectid
+[link-styleci]: https://styleci.io/repos/160008378
 [link-scrutinizer]: https://scrutinizer-ci.com/g/quartzy/courier-sparkpost
 [link-downloads]: https://packagist.org/packages/quartzy/courier-sparkpost
 [link-contributors]: ../../contributors

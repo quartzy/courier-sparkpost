@@ -28,7 +28,7 @@ You will also need to install a php-http implementation library
 ```php
 <?php
 
-use Courier\SparkPostCourier;
+use Courier\Sparkpost\SparkPostCourier;
 use GuzzleHttp\Client;
 use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
 use PhpEmail\Content\TemplatedContent;

@@ -7,7 +7,6 @@ namespace Courier\Sparkpost;
 use Courier\ConfirmingCourier;
 use Courier\Exceptions\TransmissionException;
 use Courier\Exceptions\UnsupportedContentException;
-use Courier\Exceptions\ValidationException;
 use Courier\SavesReceipts;
 use PhpEmail\Address;
 use PhpEmail\Content;
@@ -64,17 +63,24 @@ class SparkPostCourier implements ConfirmingCourier
     private $sparkPost;
 
     /**
+     * @var SparkPostTemplates
+     */
+    private $templates;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @param SparkPost       $sparkPost
-     * @param LoggerInterface $logger
+     * @param SparkPost          $sparkPost
+     * @param SparkPostTemplates $templates
+     * @param LoggerInterface    $logger
      */
-    public function __construct(SparkPost $sparkPost, LoggerInterface $logger = null)
+    public function __construct(SparkPost $sparkPost, SparkPostTemplates $templates = null, LoggerInterface $logger = null)
     {
         $this->sparkPost = $sparkPost;
+        $this->templates = $templates ?: new SparkPostTemplates($sparkPost, $logger);
         $this->logger    = $logger ?: new NullLogger();
     }
 
@@ -267,61 +273,18 @@ class SparkPostCourier implements ConfirmingCourier
      */
     protected function buildTemplateContent(Email $email): array
     {
+        // SparkPost does not currently support templated emails with attachments, so it must be converted to a
+        // SimpleContent message instead.
+        if ($email->getAttachments()) {
+            return $this->buildSimpleContent($this->templates->convertTemplatedEmail($email));
+        }
+
         $content = [
             self::TEMPLATE_ID => $email->getContent()->getTemplateId(),
         ];
 
         if ($headers = $this->getContentHeaders($email)) {
             $content[self::HEADERS] = $headers;
-        }
-
-        if ($email->getAttachments()) {
-            /*
-             * SparkPost does not currently support sending attachments with templated emails. For this reason,
-             * we will instead get the template from SparkPost and create a new inline template using the information
-             * from it instead.
-             */
-            $template    = $this->getTemplate($email);
-            $inlineEmail = clone $email;
-
-            $inlineEmail
-                ->setSubject($template[self::SUBJECT])
-                ->setContent($this->getInlineContent($template));
-
-            // If the from contains a templated from, it should be actively replaced now to avoid validation errors.
-            if (strpos($template[self::FROM][self::CONTACT_EMAIL], '{{') !== false) {
-                $inlineEmail->setFrom($email->getFrom());
-            } else {
-                $inlineEmail->setFrom(
-                    new Address(
-                        $template[self::FROM][self::CONTACT_EMAIL],
-                        $template[self::FROM][self::CONTACT_NAME]
-                    )
-                );
-            }
-
-            // If the form contains a templated replyTo, it should be actively replaced now to avoid validation errors.
-            if (array_key_exists(self::REPLY_TO, $template)) {
-                if (strpos($template[self::REPLY_TO], '{{') !== false) {
-                    if (empty($email->getReplyTos())) {
-                        throw new ValidationException('Reply to is templated but no value was given');
-                    }
-
-                    $inlineEmail->setReplyTos($email->getReplyTos()[0]);
-                } else {
-                    $inlineEmail->setReplyTos(Address::fromString($template[self::REPLY_TO]));
-                }
-            }
-
-            $content = $this->buildSimpleContent($inlineEmail);
-
-            // If the template AND content include headers, merge them
-            // if only the template includes headers, then just use that
-            if (array_key_exists(self::HEADERS, $template) && array_key_exists(self::HEADERS, $content)) {
-                $content[self::HEADERS] = array_merge($template[self::HEADERS], $content[self::HEADERS]);
-            } elseif (array_key_exists(self::HEADERS, $template)) {
-                $content[self::HEADERS] = $template[self::HEADERS];
-            }
         }
 
         return $content;
@@ -370,65 +333,19 @@ class SparkPostCourier implements ConfirmingCourier
     {
         $headers = [];
 
-        if ($ccHeader = $this->buildCcHeader($email)) {
-            $headers[self::CC_HEADER] = $ccHeader;
-        }
-
         foreach ($email->getHeaders() as $header) {
             $headers[$header->getField()] = $header->getValue();
         }
 
+        if ($ccHeader = $this->buildCcHeader($email)) {
+            $headers[self::CC_HEADER] = $ccHeader;
+        } else {
+            // If this was set on a template in SparkPost, we will remove it, because there are no
+            // CCs defined on the email itself.
+            unset($headers[self::CC_HEADER]);
+        }
+
         return $headers;
-    }
-
-    /**
-     * Create the SimpleContent based on the SparkPost template data.
-     *
-     * @param array $template
-     *
-     * @return Content\SimpleContent
-     */
-    protected function getInlineContent(array $template): Content\SimpleContent
-    {
-        $htmlContent = null;
-        if (array_key_exists(self::HTML, $template)) {
-            $htmlContent = new Content\SimpleContent\Message($template[self::HTML]);
-        }
-
-        $textContent = null;
-        if (array_key_exists(self::TEXT, $template)) {
-            $textContent = new Content\SimpleContent\Message($template[self::TEXT]);
-        }
-
-        return new Content\SimpleContent($htmlContent, $textContent);
-    }
-
-    /**
-     * Get the template content from SparkPost.
-     *
-     * @param Email $email
-     *
-     * @throws TransmissionException
-     *
-     * @return array
-     */
-    private function getTemplate(Email $email): array
-    {
-        try {
-            $response = $this->sparkPost->syncRequest('GET', "templates/{$email->getContent()->getTemplateId()}");
-
-            return $response->getBody()['results'][self::CONTENT];
-        } catch (SparkPostException $e) {
-            $this->logger->error(
-                'Received status {code} from SparkPost while retrieving template with body: {body}',
-                [
-                    'code' => $e->getCode(),
-                    'body' => $e->getBody(),
-                ]
-            );
-
-            throw new TransmissionException($e->getCode(), $e);
-        }
     }
 
     /**

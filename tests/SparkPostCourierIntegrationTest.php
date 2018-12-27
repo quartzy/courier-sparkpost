@@ -15,6 +15,7 @@ use SparkPost\SparkPost;
 
 /**
  * @covers \Courier\Sparkpost\SparkPostCourier
+ * @covers \Courier\Sparkpost\SparkPostTemplates
  * @large
  */
 class SparkPostCourierIntegrationTest extends IntegrationTestCase

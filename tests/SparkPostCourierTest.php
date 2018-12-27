@@ -28,6 +28,7 @@ use SparkPost\Transmission;
 
 /**
  * @covers \Courier\Sparkpost\SparkPostCourier
+ * @covers \Courier\Sparkpost\SparkPostTemplates
  */
 class SparkPostCourierTest extends TestCase
 {

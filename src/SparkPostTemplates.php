@@ -126,7 +126,7 @@ class SparkPostTemplates
      *
      * @return array
      */
-    private function getTemplate(Email $email): array
+    protected function getTemplate(Email $email): array
     {
         try {
             $response = $this->sparkPost->syncRequest('GET', "templates/{$email->getContent()->getTemplateId()}");

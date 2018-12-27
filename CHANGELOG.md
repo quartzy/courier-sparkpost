@@ -7,6 +7,8 @@ and this project attempts to follow [Semantic Versioning](http://semver.org/spec
 
 ## Unreleased
 
+## 0.1.2 - 2018-12-26
+
 ### Deprecated
 
 * The `fromEmail` and `fromDomain` variables are deprecated in the template data. Sparkpost now allows for a single
@@ -15,6 +17,10 @@ from address to be provided.
 ### Added
 
 * Added a `fromAddress` variable in template data, representing the full email address (`sample@test.com`)
+
+### Changed
+
+* Extracted inline template logic into separate class in backwards compatible manner.
 
 ## 0.1.1 - 2018-12-10
 

@@ -127,7 +127,6 @@ class SparkPostCourier implements ConfirmingCourier
     protected function supportedContent(): array
     {
         return [
-            Content\EmptyContent::class,
             Content\Contracts\SimpleContent::class,
             Content\Contracts\TemplatedContent::class,
         ];
@@ -190,16 +189,6 @@ class SparkPostCourier implements ConfirmingCourier
             case $email->getContent() instanceof Content\Contracts\TemplatedContent:
                 $message[self::CONTENT]           = $this->buildTemplateContent($email);
                 $message[self::SUBSTITUTION_DATA] = $this->buildTemplateData($email);
-
-                break;
-
-            case $email->getContent() instanceof Content\EmptyContent:
-                $email->setContent(new Content\SimpleContent(
-                    new Content\SimpleContent\Message(''),
-                    new Content\SimpleContent\Message('')
-                ));
-
-                $message[self::CONTENT] = $this->buildSimpleContent($email);
 
                 break;
 

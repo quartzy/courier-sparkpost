@@ -15,7 +15,6 @@ use Http\Client\Exception\HttpException;
 use Mockery;
 use PhpEmail\Address;
 use PhpEmail\Attachment\FileAttachment;
-use PhpEmail\Content\EmptyContent;
 use PhpEmail\Content\SimpleContent;
 use PhpEmail\Content\TemplatedContent;
 use PhpEmail\Email;
@@ -125,7 +124,7 @@ class SparkPostCourierTest extends TestCase
 
         $email = new Email(
             'Subject',
-            new EmptyContent(),
+            SimpleContent::text(''),
             new Address('sender@test.com'),
             [new Address('recipient@test.com')]
         );
@@ -681,7 +680,7 @@ class SparkPostCourierTest extends TestCase
 
         $email = new Email(
             'Subject',
-            new EmptyContent(),
+            SimpleContent::text(''),
             new Address('sender@test.com'),
             [new Address('recipient@test.com')]
         );

@@ -178,12 +178,13 @@ class SparkPostCourierTest extends TestCase
                 'template_id' => '1234',
             ],
             'substitution_data' => [
-                'test'       => 'value',
-                'fromName'   => null,
-                'fromEmail'  => 'sender',
-                'fromDomain' => 'test.com',
-                'subject'    => 'Subject',
-                'replyTo'    => 'reply.to@test.com',
+                'test'        => 'value',
+                'fromName'    => null,
+                'fromAddress' => 'sender@test.com',
+                'fromEmail'   => 'sender',
+                'fromDomain'  => 'test.com',
+                'subject'     => 'Subject',
+                'replyTo'     => 'reply.to@test.com',
             ],
             'recipients' => [
                 [
@@ -225,13 +226,14 @@ class SparkPostCourierTest extends TestCase
                 ],
             ],
             'substitution_data' => [
-                'test'       => 'value',
-                'fromName'   => null,
-                'fromEmail'  => 'sender',
-                'fromDomain' => 'test.com',
-                'subject'    => 'Subject',
-                'replyTo'    => 'reply.to@test.com',
-                'ccHeader'   => 'cc@test.com',
+                'test'        => 'value',
+                'fromName'    => null,
+                'fromAddress' => 'sender@test.com',
+                'fromEmail'   => 'sender',
+                'fromDomain'  => 'test.com',
+                'subject'     => 'Subject',
+                'replyTo'     => 'reply.to@test.com',
+                'ccHeader'    => 'cc@test.com',
             ],
             'recipients' => [
                 [
@@ -322,11 +324,12 @@ class SparkPostCourierTest extends TestCase
                 ],
             ],
             'substitution_data' => [
-                'test'       => 'value',
-                'fromName'   => null,
-                'fromEmail'  => 'sender',
-                'fromDomain' => 'test.com',
-                'subject'    => 'Subject',
+                'test'        => 'value',
+                'fromName'    => null,
+                'fromAddress' => 'sender@test.com',
+                'fromEmail'   => 'sender',
+                'fromDomain'  => 'test.com',
+                'subject'     => 'Subject',
             ],
             'recipients' => [
                 [
@@ -408,12 +411,13 @@ class SparkPostCourierTest extends TestCase
                 ],
             ],
             'substitution_data' => [
-                'test'       => 'value',
-                'fromName'   => null,
-                'fromEmail'  => 'sender',
-                'fromDomain' => 'test.com',
-                'subject'    => 'Subject',
-                'ccHeader'   => 'cc@test.com',
+                'test'        => 'value',
+                'fromName'    => null,
+                'fromAddress' => 'sender@test.com',
+                'fromEmail'   => 'sender',
+                'fromDomain'  => 'test.com',
+                'subject'     => 'Subject',
+                'ccHeader'    => 'cc@test.com',
             ],
             'recipients' => [
                 [
@@ -458,7 +462,7 @@ class SparkPostCourierTest extends TestCase
             'results' => [
                 'content' => [
                     'from' => [
-                        'email' => '{{fromEmail}}@{{fromDomain}}',
+                        'email' => '{{fromAddress}}',
                         'name'  => 'Template Address',
                     ],
                     'subject'  => 'Template Subject',
@@ -498,12 +502,13 @@ class SparkPostCourierTest extends TestCase
                 ],
             ],
             'substitution_data' => [
-                'test'       => 'value',
-                'fromName'   => null,
-                'fromEmail'  => 'sender',
-                'fromDomain' => 'test.com',
-                'subject'    => 'Subject',
-                'replyTo'    => 'dynamic@replyto.com',
+                'test'        => 'value',
+                'fromName'    => null,
+                'fromAddress' => 'sender@test.com',
+                'fromEmail'   => 'sender',
+                'fromDomain'  => 'test.com',
+                'subject'     => 'Subject',
+                'replyTo'     => 'dynamic@replyto.com',
             ],
             'recipients' => [
                 [
@@ -540,7 +545,7 @@ class SparkPostCourierTest extends TestCase
             'results' => [
                 'content' => [
                     'from' => [
-                        'email' => '{{fromEmail}}@{{fromDomain}}',
+                        'email' => '{{fromAddress}}',
                         'name'  => 'Template Address',
                     ],
                     'subject'  => 'Template Subject',

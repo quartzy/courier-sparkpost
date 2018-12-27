@@ -232,10 +232,16 @@ class SparkPostCourier implements ConfirmingCourier
             $templateData['fromName'] = $email->getFrom()->getName();
         }
 
+        if (!array_key_exists('fromAddress', $templateData)) {
+            $templateData['fromAddress'] = $email->getFrom()->getEmail();
+        }
+
+        // Deprecated: fromEmail will be removed in later releases of the SparkPostCourier in favor of fromAddress
         if (!array_key_exists('fromEmail', $templateData)) {
             $templateData['fromEmail'] = explode('@', $email->getFrom()->getEmail())[0];
         }
 
+        // Deprecated: fromDomain will be removed in later releases of the SparkPostCourier in favor of fromAddress
         if (!array_key_exists('fromDomain', $templateData)) {
             $templateData['fromDomain'] = explode('@', $email->getFrom()->getEmail())[1];
         }

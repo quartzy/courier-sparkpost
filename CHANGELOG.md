@@ -7,6 +7,15 @@ and this project attempts to follow [Semantic Versioning](http://semver.org/spec
 
 ## Unreleased
 
+### Deprecated
+
+* The `fromEmail` and `fromDomain` variables are deprecated in the template data. Sparkpost now allows for a single
+from address to be provided.
+
+### Added
+
+* Added a `fromAddress` variable in template data, representing the full email address (`sample@test.com`)
+
 ## 0.1.1 - 2018-12-10
 
 ### Added

@@ -74,14 +74,13 @@ class SparkPostCourier implements ConfirmingCourier
 
     /**
      * @param SparkPost          $sparkPost
-     * @param SparkPostTemplates $templates
      * @param LoggerInterface    $logger
      */
-    public function __construct(SparkPost $sparkPost, SparkPostTemplates $templates = null, LoggerInterface $logger = null)
+    public function __construct(SparkPost $sparkPost, LoggerInterface $logger = null)
     {
         $this->sparkPost = $sparkPost;
-        $this->templates = $templates ?: new SparkPostTemplates($sparkPost, $logger);
         $this->logger    = $logger ?: new NullLogger();
+        $this->templates = new SparkPostTemplates($sparkPost, $this->logger);
     }
 
     public function deliver(Email $email): void

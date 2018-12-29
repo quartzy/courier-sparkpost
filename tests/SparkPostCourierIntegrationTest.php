@@ -116,6 +116,59 @@ class SparkPostCourierIntegrationTest extends IntegrationTestCase
             ->withContent(new TemplatedContent(
                 getenv('SPARKPOST_TEMPLATE_ID'),
                 [
+                    'html' => 'HTML',
+                    'text' => 'text',
+                ]
+            ))
+            ->addHeader('X-test-header', 'Test')
+            ->build();
+
+        $this->courier->deliver($email);
+
+        $message = $this->getEmailDeliveredToTo($subject);
+
+        self::assertEquals($subject, $message->getHeaderValue('subject'));
+        self::assertEquals($this->getTo(), $message->getHeaderValue('to'));
+        self::assertEquals($this->getCc(), $message->getHeaderValue('cc'));
+        self::assertStringStartsWith('HTML', $message->getHtmlContent());
+        // SparkPost does not respect headers with standard templated emails
+        self::assertNull($message->getHeaderValue('x-test-header'));
+
+        $message = $this->getEmailDeliveredToCc($subject);
+
+        self::assertEquals($subject, $message->getHeaderValue('subject'));
+        self::assertEquals($this->getTo(), $message->getHeaderValue('to'));
+        self::assertEquals($this->getCc(), $message->getHeaderValue('cc'));
+        self::assertStringStartsWith('HTML', $message->getHtmlContent());
+        self::assertEquals('text', trim($message->getTextContent()));
+        // SparkPost does not respect headers with standard templated emails
+        self::assertNull($message->getHeaderValue('x-test-header'));
+
+        $message = $this->getEmailDeliveredToBcc($subject);
+
+        self::assertEquals($subject, $message->getHeaderValue('subject'));
+        self::assertEquals($this->getTo(), $message->getHeaderValue('to'));
+        self::assertEquals($this->getCc(), $message->getHeaderValue('cc'));
+        self::assertStringStartsWith('HTML', $message->getHtmlContent());
+        self::assertEquals('text', trim($message->getTextContent()));
+        // Headers are not respected with standard templated emails
+        self::assertNull($message->getHeaderValue('x-test-header'));
+    }
+
+    public function testSendsTemplatedEmailWithAttachments()
+    {
+        $subject = 'Courier Integration Templated Test ' . random_int(100000000, 999999999);
+
+        $email = EmailBuilder::email()
+            ->from(getenv('FROM_EMAIL'))
+            ->replyTo(getenv('FROM_EMAIL'))
+            ->to($this->getTo(), 'To')
+            ->cc($this->getCc(), 'CC')
+            ->bcc($this->getBcc(), 'BCC')
+            ->withSubject($subject)
+            ->withContent(new TemplatedContent(
+                getenv('SPARKPOST_TEMPLATE_ID'),
+                [
                     'html' => 'HTML<img src="cid:embed-test"/>',
                     'text' => 'text',
                 ]
@@ -132,7 +185,7 @@ class SparkPostCourierIntegrationTest extends IntegrationTestCase
         self::assertEquals($subject, $message->getHeaderValue('subject'));
         self::assertEquals($this->getTo(), $message->getHeaderValue('to'));
         self::assertEquals($this->getCc(), $message->getHeaderValue('cc'));
-        self::stringStartsWith('HTML', $message->getHtmlContent());
+        self::assertStringStartsWith('HTML', $message->getHtmlContent());
         self::assertHasAttachmentWithContentId($message, 'embed-test');
         self::assertHasAttachmentWithName($message, 'Attached File');
         self::assertEquals('Test', $message->getHeaderValue('x-test-header'));

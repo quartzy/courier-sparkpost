@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Courier\Sparkpost\Test;
+namespace Courier\SparkPost\Test;
 
 use Courier\Exceptions\TransmissionException;
 use Courier\Exceptions\UnsupportedContentException;
 use Courier\Exceptions\ValidationException;
-use Courier\Sparkpost\SparkPostCourier;
-use Courier\Sparkpost\Test\Support\TestContent;
+use Courier\SparkPost\SparkPostCourier;
+use Courier\SparkPost\Test\Support\TestContent;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Http\Client\Exception\HttpException;
@@ -26,8 +26,8 @@ use SparkPost\SparkPostResponse;
 use SparkPost\Transmission;
 
 /**
- * @covers \Courier\Sparkpost\SparkPostCourier
- * @covers \Courier\Sparkpost\SparkPostTemplates
+ * @covers \Courier\SparkPost\SparkPostCourier
+ * @covers \Courier\SparkPost\SparkPostTemplates
  */
 class SparkPostCourierTest extends TestCase
 {

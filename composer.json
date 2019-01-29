@@ -1,6 +1,6 @@
 {
     "name": "quartzy/courier-sparkpost",
-    "description": "An adapter to use Sparkpost with Courier",
+    "description": "An adapter to use SparkPost with Courier",
     "type": "library",
     "license": "Apache-2.0",
     "authors": [
@@ -27,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Courier\\Sparkpost\\": "src"
+            "Courier\\SparkPost\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Courier\\Sparkpost\\Test\\": "tests"
+            "Courier\\SparkPost\\Test\\": "tests"
         }
     },
     "scripts": {

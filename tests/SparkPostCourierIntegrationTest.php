@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Courier\Sparkpost\Test;
+namespace Courier\SparkPost\Test;
 
-use Courier\Sparkpost\SparkPostCourier;
+use Courier\SparkPost\SparkPostCourier;
 use GuzzleHttp\Client;
 use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
 use PhpEmail\Attachment\FileAttachment;
@@ -14,8 +14,8 @@ use PhpEmail\EmailBuilder;
 use SparkPost\SparkPost;
 
 /**
- * @covers \Courier\Sparkpost\SparkPostCourier
- * @covers \Courier\Sparkpost\SparkPostTemplates
+ * @covers \Courier\SparkPost\SparkPostCourier
+ * @covers \Courier\SparkPost\SparkPostTemplates
  * @large
  */
 class SparkPostCourierIntegrationTest extends IntegrationTestCase

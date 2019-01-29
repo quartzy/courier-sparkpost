@@ -1,4 +1,4 @@
-# Sparkpost Courier
+# SparkPost Courier
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Total Downloads][ico-downloads]][link-downloads]
@@ -8,7 +8,7 @@
 [![Style Status][ico-styleci]][link-styleci]
 [![Scrutinizer Code Quality][ico-scrutinizer]][link-scrutinizer]
 
-A courier implementation for Sparkpost.
+A courier implementation for SparkPost.
 
 See [documentation](https://quartzy.github.io/courier/couriers/sparkpost/) for full details.
 
@@ -21,14 +21,14 @@ composer require quartzy/courier-sparkpost
 ```
 
 You will also need to install a php-http implementation library
-[as defined in the Sparkpost docs](https://github.com/SparkPost/php-sparkpost#installation).
+[as defined in the SparkPost docs](https://github.com/SparkPost/php-sparkpost#installation).
 
 ## Usage
 
 ```php
 <?php
 
-use Courier\Sparkpost\SparkPostCourier;
+use Courier\SparkPost\SparkPostCourier;
 use GuzzleHttp\Client;
 use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
 use PhpEmail\Content\TemplatedContent;

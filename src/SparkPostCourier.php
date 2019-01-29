@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Courier\Sparkpost;
+namespace Courier\SparkPost;
 
 use Courier\ConfirmingCourier;
 use Courier\Exceptions\TransmissionException;

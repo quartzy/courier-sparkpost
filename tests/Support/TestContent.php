@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Courier\Sparkpost\Test\Support;
+namespace Courier\SparkPost\Test\Support;
 
 use PhpEmail\Content;
 

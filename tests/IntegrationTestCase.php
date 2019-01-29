@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Courier\Sparkpost\Test;
+namespace Courier\SparkPost\Test;
 
 use ZBateson\MailMimeParser\Header\Part\ParameterPart;
 use ZBateson\MailMimeParser\MailMimeParser;

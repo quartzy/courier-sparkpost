@@ -7,6 +7,8 @@ and this project attempts to follow [Semantic Versioning](http://semver.org/spec
 
 ## Unreleased
 
+## 0.3.0 - 2019-01-29
+
 ### Changed
 
 * Moved namespace from `Courier\Sparkpost` to `Courier\SparkPost` for consistent casing

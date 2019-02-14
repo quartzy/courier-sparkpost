@@ -256,11 +256,70 @@ class SparkPostCourierTest extends TestCase
         $courier->deliver($email);
     }
 
+    public function addAttachments(): array
+    {
+        file_put_contents(self::$file, 'Attachment file');
+
+        return [
+            [
+                function (Email $email) {
+                    $email->addAttachments(new FileAttachment(self::$file, 'file name.txt', null, null, 'UTF-16'));
+                },
+                [],
+                [
+                    [
+                        'name' => 'file name.txt',
+                        'type' => mime_content_type(self::$file) . '; name="file name.txt"; charset="UTF-16"',
+                        'data' => base64_encode(file_get_contents(self::$file)),
+                    ],
+                ],
+            ],
+            [
+                function (Email $email) {
+                    $email->embed(new FileAttachment(self::$file, 'image.jpg'), 'inline');
+                },
+                [
+                    [
+                        'name' => 'inline',
+                        'type' => mime_content_type(self::$file) . '; name="image.jpg"',
+                        'data' => base64_encode(file_get_contents(self::$file)),
+                    ],
+                ],
+                [],
+            ],
+            [
+                function (Email $email) {
+                    $email
+                        ->addAttachments(new FileAttachment(self::$file, 'file name.txt', null, null, 'UTF-16'))
+                        ->embed(new FileAttachment(self::$file, 'image.jpg'), 'inline');
+                },
+                [
+                    [
+                        'name' => 'inline',
+                        'type' => mime_content_type(self::$file) . '; name="image.jpg"',
+                        'data' => base64_encode(file_get_contents(self::$file)),
+                    ],
+                ],
+                [
+                    [
+                        'name' => 'file name.txt',
+                        'type' => mime_content_type(self::$file) . '; name="file name.txt"; charset="UTF-16"',
+                        'data' => base64_encode(file_get_contents(self::$file)),
+                    ],
+                ],
+            ],
+        ];
+    }
+
     /**
      * @testdox It should support sending a templated email with attachments
+     * @dataProvider addAttachments
      */
-    public function testSendsTemplatedEmailWithAttachment()
-    {
+    public function testSendsTemplatedEmailWithAttachment(
+        \Closure $addAttachments,
+        array $expectedEmbedded,
+        array $expectedAttachemts
+    ) {
         $courier = new SparkPostCourier($this->sparkPost);
 
         $email = new Email(
@@ -270,9 +329,7 @@ class SparkPostCourierTest extends TestCase
             [new Address('recipient@test.com')]
         );
 
-        $email
-            ->addAttachments(new FileAttachment(self::$file, 'file name.txt', null, null, 'UTF-16'))
-            ->embed(new FileAttachment(self::$file, 'image.jpg'), 'inline');
+        $addAttachments($email);
 
         $expectedTemplate = [
             'results' => [
@@ -304,20 +361,8 @@ class SparkPostCourierTest extends TestCase
                 'subject'       => 'Template Subject',
                 'html'          => 'This is a template html test',
                 'text'          => null,
-                'inline_images' => [
-                    [
-                        'name' => 'inline',
-                        'type' => mime_content_type(self::$file) . '; name="image.jpg"',
-                        'data' => base64_encode(file_get_contents(self::$file)),
-                    ],
-                ],
-                'attachments'   => [
-                    [
-                        'name' => 'file name.txt',
-                        'type' => mime_content_type(self::$file) . '; name="file name.txt"; charset="UTF-16"',
-                        'data' => base64_encode(file_get_contents(self::$file)),
-                    ],
-                ],
+                'inline_images' => $expectedEmbedded,
+                'attachments'   => $expectedAttachemts,
                 'reply_to'      => '"Template Replier" <template.replier@test.com>',
                 'headers'       => [
                     'X-Header' => 'test',

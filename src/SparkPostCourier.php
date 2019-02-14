@@ -263,7 +263,7 @@ class SparkPostCourier implements ConfirmingCourier
     {
         // SparkPost does not currently support templated emails with attachments, so it must be converted to a
         // SimpleContent message instead.
-        if ($email->getAttachments()) {
+        if ($email->getAttachments() || $email->getEmbedded()) {
             return $this->buildSimpleContent($this->templates->convertTemplatedEmail($email));
         }
 

@@ -7,6 +7,10 @@ and this project attempts to follow [Semantic Versioning](http://semver.org/spec
 
 ## Unreleased
 
+### Fixed
+
+* Ensure emails with just embedded attachments still build an inline SparkPost template (https://github.com/quartzy/courier-sparkpost/pull/6)
+
 ## 0.3.0 - 2019-01-29
 
 ### Changed
